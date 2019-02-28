@@ -52,6 +52,10 @@ class VideoReferenceDAOImpl(entityManager: EntityManager)
       .flatMap(findByUUID)
   }
 
+  override def findByUUID(uuid: UUID): Option[VideoReference] =
+    findByNamedQuery("VideoReference.findByUuid", Map("uuid" -> uuid))
+      .headOption
+
   override def findAll(): Iterable[VideoReference] =
     findByNamedQuery("VideoReference.findAll")
 

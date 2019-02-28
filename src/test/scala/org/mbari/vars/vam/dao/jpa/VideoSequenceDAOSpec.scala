@@ -133,7 +133,7 @@ class VideoSequenceDAOSpec extends FlatSpec with Matchers {
     a.cameraID should be(videoSequence.cameraID)
 
     // Setup for later test. We need a videoUUID and UUID
-    videoUUID = a.videos.head.primaryKey.get
+    videoUUID = a.videos.head.uuid
 
   }
 
@@ -151,7 +151,7 @@ class VideoSequenceDAOSpec extends FlatSpec with Matchers {
     println(s"!!!!! ${a.videos.size}")
     val v = a.videos.filter(_.uuid.equals(videoUUID))
     v should have size 1
-    v.head.primaryKey.get should be(videoUUID)
+    v.head.uuid should be(videoUUID)
   }
 
   it should "findByTimestamp" in {
@@ -186,7 +186,7 @@ class VideoSequenceDAOSpec extends FlatSpec with Matchers {
     val vs = dao.findByName(name)
     vs shouldBe defined
 
-    Await.result(dao.runTransaction(d => d.deleteByUUID(vs.get.primaryKey.get)), timeout)
+    Await.result(dao.runTransaction(d => d.deleteByUUID(vs.get.uuid)), timeout)
 
     val vs2 = dao.findByName(name)
     vs2 shouldBe empty

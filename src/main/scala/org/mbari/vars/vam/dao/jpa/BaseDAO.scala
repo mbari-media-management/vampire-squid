@@ -65,8 +65,8 @@ abstract class BaseDAO[B <: PersistentObject: ClassTag](val entityManager: Entit
    * @param primaryKey
    * @return
    */
-  override def findByUUID(primaryKey: UUID): Option[B] =
-    Option(entityManager.find(classTag[B].runtimeClass, primaryKey).asInstanceOf[B])
+  //  override def findByUUID(primaryKey: UUID): Option[B] =
+  //    Option(entityManager.find(classTag[B].runtimeClass, primaryKey).asInstanceOf[B])
 
   override def runTransaction[R](fn: this.type => R)(implicit ec: ExecutionContext): Future[R] = {
     import org.mbari.vars.vam.dao.jpa.Implicits.RichEntityManager

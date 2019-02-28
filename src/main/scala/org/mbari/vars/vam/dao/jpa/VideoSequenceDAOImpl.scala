@@ -41,6 +41,10 @@ class VideoSequenceDAOImpl(entityManager: EntityManager)
   @Transient
   private[this] val log = LoggerFactory.getLogger(getClass)
 
+  override def findByUUID(uuid: UUID): Option[VideoSequence] =
+    findByNamedQuery("VideoSequence.findByUuid", Map("uuid" -> uuid))
+      .headOption
+
   override def findByCameraID(cameraID: String): Iterable[VideoSequence] =
     findByNamedQuery("VideoSequence.findByCameraID", Map("cameraID" -> cameraID))
 

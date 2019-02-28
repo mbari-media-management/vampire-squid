@@ -36,6 +36,10 @@ class VideoDAOImpl(entityManager: EntityManager)
   extends BaseDAO[Video](entityManager)
   with VideoDAO[Video] {
 
+  override def findByUUID(uuid: UUID): Option[Video] =
+    findByNamedQuery("Video.findByUuid", Map("uuid" -> uuid))
+      .headOption
+
   override def findByName(name: String): Option[Video] =
     findByNamedQuery("Video.findByName", Map("name" -> name)).headOption
 

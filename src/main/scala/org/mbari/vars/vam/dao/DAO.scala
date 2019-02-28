@@ -33,7 +33,7 @@ trait DAO[B <: PersistentObject] {
   def update(entity: B): B
   def delete(entity: B): Unit
   def deleteByUUID(primaryKey: UUID): Unit
-  def findByUUID(primaryKey: UUID): Option[B]
+  def findByUUID(uuid: UUID): Option[B]
   def findAll(): Iterable[B]
   def runTransaction[R](fn: this.type => R)(implicit ec: ExecutionContext): Future[R]
   def close(): Unit

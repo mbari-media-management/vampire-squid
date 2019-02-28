@@ -21,3 +21,8 @@ target/
 .project
 .manager
 .scala_dependencies
+
+# vscode
+.metals/
+.vscode/
+.bloop/

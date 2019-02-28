@@ -33,14 +33,17 @@ import scala.util.Try
 @Entity(name = "VideoReference")
 @Table(name = "video_references", indexes = Array(
   new Index(name = "idx_video_references__uri", columnList = "uri"),
-  new Index(name = "idx_video_references__video_uuid", columnList = "video_uuid")))
-@EntityListeners(value = Array(classOf[TransactionLogger]))
+  new Index(name = "idx_video_references__video_id", columnList = "video_id")))
+@EntityListeners(value = Array(classOf[TransactionLogger], classOf[UUIDKeyGenerator]))
 @NamedNativeQueries(Array(
   new NamedNativeQuery(
     name = "VideoReference.findByFileName",
     query = "SELECT uuid FROM video_references WHERE uri LIKE ?1")))
 @NamedQueries(
   Array(
+    new NamedQuery(
+      name = "VideoReference.findByUuid",
+      query = "SELECT v FROM VideoReference v WHERE v.uuid = :uuid"),
     new NamedQuery(
       name = "VideoReference.findAll",
       query = "SELECT v FROM VideoReference v"),
@@ -53,7 +56,10 @@ import scala.util.Try
     new NamedQuery(
       name = "VideoReference.findByURI",
       query = "SELECT v FROM VideoReference v WHERE v.uri = :uri")))
-class VideoReference extends HasUUID with HasOptimisticLock with HasDescription {
+class VideoReference extends HasID
+  with HasUUID
+  with HasOptimisticLock
+  with HasDescription {
 
   @Expose(serialize = true)
   @Basic(optional = false)
@@ -109,7 +115,7 @@ class VideoReference extends HasUUID with HasOptimisticLock with HasDescription 
 
   @Expose(serialize = false)
   @ManyToOne(cascade = Array(CascadeType.PERSIST, CascadeType.DETACH), optional = false)
-  @JoinColumn(name = "video_uuid", nullable = false)
+  @JoinColumn(name = "video_id", nullable = false)
   var video: Video = _
 
   def mimetype: Option[MimeType] = Try(new MimeType(container)).toOption

@@ -33,7 +33,7 @@ import scala.collection.JavaConverters._
 @Table(name = "video_sequences", indexes = Array(
   new Index(name = "idx_video_sequences__name", columnList = "name"),
   new Index(name = "idx_video_sequences__camera_id", columnList = "camera_id")))
-@EntityListeners(value = Array(classOf[TransactionLogger]))
+@EntityListeners(value = Array(classOf[TransactionLogger], classOf[UUIDKeyGenerator]))
 @NamedNativeQueries(Array(
   new NamedNativeQuery(
     name = "VideoSequence.findAllNames",
@@ -45,6 +45,9 @@ import scala.collection.JavaConverters._
     name = "VideoSequence.findAllCameraIDs",
     query = "SELECT DISTINCT camera_id FROM video_sequences ORDER BY camera_id ASC")))
 @NamedQueries(Array(
+  new NamedQuery(
+    name = "VideoSequence.findByUuid",
+    query = "SELECT v FROM VideoSequence v WHERE v.uuid = :uuid"),
   new NamedQuery(
     name = "VideoSequence.findAll",
     query = "SELECT v FROM VideoSequence v"),
@@ -66,7 +69,10 @@ import scala.collection.JavaConverters._
   new NamedQuery(
     name = "VideoSequence.findByCameraIDAndBetweenDates",
     query = "SELECT v FROM VideoSequence v LEFT JOIN v.javaVideos w WHERE v.cameraID = :cameraID AND w.start BETWEEN :startDate AND :endDate")))
-class VideoSequence extends HasUUID with HasOptimisticLock with HasDescription {
+class VideoSequence extends HasID
+  with HasUUID
+  with HasOptimisticLock
+  with HasDescription {
 
   @Expose(serialize = true)
   @Basic(optional = false)

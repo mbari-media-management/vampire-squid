@@ -17,10 +17,12 @@
 package org.mbari.vars.vam.dao.jpa
 
 import java.util.UUID
-import javax.persistence._
 
+import javax.persistence._
 import com.google.gson.annotations.Expose
 import org.mbari.vars.vam.dao.PersistentObject
+
+import scala.beans.BeanProperty
 
 /**
  * Mixin that supports the UUID fields
@@ -28,11 +30,11 @@ import org.mbari.vars.vam.dao.PersistentObject
  * @author Brian Schlining
  * @since 2016-05-05T17:50:00
  */
-trait HasUUID extends PersistentObject {
+trait HasUUID {
 
-  @Expose(serialize = true)
-  @Id
-  @GeneratedValue(generator = "system-uuid")
+  @BeanProperty
+  @Expose(serialize = true) //@Id
+  //@GeneratedValue(generator = "system-uuid")
   @Column(
     name = "uuid",
     nullable = false,
@@ -40,7 +42,5 @@ trait HasUUID extends PersistentObject {
     length = 36)
   @Convert(converter = classOf[UUIDConverter])
   var uuid: UUID = _
-
-  def primaryKey: Option[UUID] = Option(uuid)
 
 }

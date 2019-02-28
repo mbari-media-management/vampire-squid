@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package org.mbari.vars.vam.dao
+package org.mbari.vars.vam.dao.jpa
 
-import java.util.UUID
+import com.google.gson.annotations.Expose
+import javax.persistence.{ Column, GeneratedValue, GenerationType, Id }
+import org.mbari.vars.vam.dao.PersistentObject
 
 /**
- * We have made a design decision to always use UUIDs (aka GUIDs) as the primary key. This requirement
- * is enforced so that external applications can rely on the use of that key. All persistent objects
- * should implement this trait
- *
  * @author Brian Schlining
- * @since 2016-05-05T16:21:00
+ * @since 2019-02-28T10:15:00
  */
-trait PersistentObject {
+trait HasID extends PersistentObject {
 
-  def primaryKey: Option[Long]
+  @Expose(serialize = false)
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id", updatable = false, nullable = false)
+  var id: Long = _
+
+  override def primaryKey: Option[Long] = Option(id)
 }

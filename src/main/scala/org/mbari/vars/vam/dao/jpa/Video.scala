@@ -34,15 +34,15 @@ import scala.collection.JavaConverters._
 @Table(name = "videos", indexes = Array(
   new Index(name = "idx_videos__name", columnList = "name"),
   new Index(name = "idx_videos__start_time", columnList = "start_time"),
-  new Index(name = "idx_videos__video_sequence_uuid", columnList = "video_sequence_uuid")))
-@EntityListeners(value = Array(classOf[TransactionLogger]))
+  new Index(name = "idx_videos__video_sequence_id", columnList = "video_sequence_id")))
+@EntityListeners(value = Array(classOf[TransactionLogger], classOf[UUIDKeyGenerator]))
 @NamedNativeQueries(Array(
   new NamedNativeQuery(
     name = "Video.findAllNames",
     query = "SELECT name FROM videos ORDER BY name"),
   new NamedNativeQuery(
     name = "Video.findNamesByVideoSequenceName",
-    query = "SELECT v.name FROM videos v LEFT JOIN video_sequences vs ON v.video_sequence_uuid = vs.uuid WHERE vs.name = ?1 ORDER BY v.name ASC"),
+    query = "SELECT v.name FROM videos v LEFT JOIN video_sequences vs ON v.video_sequence_id = vs.id WHERE vs.name = ?1 ORDER BY v.name ASC"),
   new NamedNativeQuery(
     name = "Video.findAllNamesAndStartDates",
     query = "SELECT name, start_time FROM videos ORDER BY start_time")))
@@ -54,7 +54,7 @@ import scala.collection.JavaConverters._
     name = "Video.findByName",
     query = "SELECT v FROM Video v WHERE v.name = :name"),
   new NamedQuery(
-    name = "Video.findByUUID",
+    name = "Video.findByUuid",
     query = "SELECT v FROM Video v WHERE v.uuid = :uuid"),
   new NamedQuery(
     name = "Video.findByVideoReferenceUUID",
@@ -65,7 +65,10 @@ import scala.collection.JavaConverters._
   new NamedQuery(
     name = "Video.findBetweenDates",
     query = "SELECT v FROM Video v WHERE v.start >= :startDate AND v.start <= :endDate")))
-class Video extends HasUUID with HasOptimisticLock with HasDescription {
+class Video extends HasID
+  with HasUUID
+  with HasOptimisticLock
+  with HasDescription {
 
   @Expose(serialize = true)
   @Basic(optional = false)
@@ -95,7 +98,7 @@ class Video extends HasUUID with HasOptimisticLock with HasDescription {
 
   @Expose(serialize = false)
   @ManyToOne(cascade = Array(CascadeType.PERSIST, CascadeType.DETACH), optional = false)
-  @JoinColumn(name = "video_sequence_uuid", nullable = false)
+  @JoinColumn(name = "video_sequence_id", nullable = false)
   var videoSequence: VideoSequence = _
 
   @Expose(serialize = true)
