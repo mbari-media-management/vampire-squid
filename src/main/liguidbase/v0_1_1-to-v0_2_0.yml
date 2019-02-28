@@ -1,0 +1,51 @@
+databaseChangeLog:
+  changeSet:
+    id: 1
+    author: brian
+    changes:
+      - addColumn:
+          tableName: video_sequences
+          columns:
+            - column:
+              name: id
+              type: bigint
+      - addColumn:
+          tableName: videos
+          columns:
+            - column:
+                name: id
+                type: bigint
+            - column:
+                name: video_sequence_id
+                type: bigint
+      - addColumn:
+          tableName: video_references
+          columns:
+            - column:
+                name: id
+                type: bigint
+            - column:
+                name: video_id
+                type: bigint
+      - dropPrimaryKey:
+          tableName: video_sequences
+      - dropPrimaryKey:
+          tableName: videos
+      - dropPrimaryKey:
+          tableName: video_references
+      - addPrimaryKey:
+          tableName: video_sequences
+          columnNames: id
+      - addPrimaryKey:
+          tableName: videos
+          columnNames: id
+      - addPrimaryKey:
+          tableName: video_references
+          columnNames: id
+      - dropAllForeignKeyConstraints:
+          baseTableName: video_sequences
+      - dropAllForeignKeyConstraints:
+          baseTableName: videos
+      - dropAllForeignKeyConstraints:
+          baseTableName: video_references
+
