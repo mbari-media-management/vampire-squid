@@ -38,7 +38,11 @@ import scala.util.Try
 @NamedNativeQueries(Array(
   new NamedNativeQuery(
     name = "VideoReference.findByFileName",
-    query = "SELECT uuid FROM video_references WHERE uri LIKE ?1")))
+    query = "SELECT uuid FROM video_references WHERE uri LIKE ?1"),
+  new NamedNativeQuery(
+    name = "VideoReference.findAllURIs",
+    query = "SELECT uri FROM video_references"
+  )))
 @NamedQueries(
   Array(
     new NamedQuery(

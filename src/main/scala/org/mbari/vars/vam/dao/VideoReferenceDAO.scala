@@ -28,6 +28,7 @@ import java.util.UUID
 trait VideoReferenceDAO[T <: PersistentObject] extends DAO[T] {
 
   def findAll(): Iterable[T]
+  def findAllURIs(): Iterable[URI]
   def findByVideoUUID(uuid: UUID): Iterable[T]
   def findConcurrent(uuid: UUID): Iterable[T]
   def findByURI(uri: URI): Option[T]

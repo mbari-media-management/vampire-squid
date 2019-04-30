@@ -45,6 +45,10 @@ class VideoReferenceV1Api(controller: VideoReferenceController)(implicit val swa
     controller.findAll.map(vs => controller.toJson(vs.asJava))
   }
 
+  get("/uris") {
+
+  }
+
   val uuidGET = (apiOperation[VideoReference]("findByUUID")
     summary "Find a video-reference by uuid"
     parameters (

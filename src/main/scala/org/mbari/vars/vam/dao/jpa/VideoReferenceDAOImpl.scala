@@ -59,6 +59,15 @@ class VideoReferenceDAOImpl(entityManager: EntityManager)
   override def findAll(): Iterable[VideoReference] =
     findByNamedQuery("VideoReference.findAll")
 
+
+  override def findAllURIs(): Iterable[URI] = {
+    val query = entityManager.createNamedQuery("VideoReference.findAllURIs")
+    query.getResultList
+      .asScala
+      .map(_.toString)
+      .map(URI.create)
+  }
+
   def findConcurrent(uuid: UUID): Iterable[VideoReference] = {
     findByUUID(uuid) match {
       case None => Nil
